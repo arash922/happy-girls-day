@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>هدیه‌ای برای فاطمه 💙</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap">
+<style>
+:root{--bg1:#0a1330;--bg2:#16264f;--gold:#f3d9a0;--txt:#eef2ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(circle at 50% 20%,var(--bg2),var(--bg1) 70%);color:var(--txt);font-family:Vazirmatn,Tahoma,sans-serif;overflow:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.page{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;opacity:0;visibility:hidden;transform:translateY(20px);transition:.8s}
+.page.on{opacity:1;visibility:visible;transform:none}
+.moon{font-size:64px;animation:fl 4s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-10px)}}
+h1{font-size:clamp(26px,7vw,40px);color:var(--gold);margin:12px 0}
+p{max-width:520px;line-height:2.1;font-size:clamp(16px,4.2vw,20px);margin:8px 0 24px}
+button{font:inherit;background:var(--gold);color:#0a1330;border:0;border-radius:30px;padding:12px 30px;font-weight:700;cursor:pointer;box-shadow:0 0 24px #f3d9a066}
+button:active{transform:scale(.96)}
+.dots{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;justify-content:center;gap:10px}
+.dots i{width:10px;height:10px;border-radius:50%;background:#ffffff44}
+.dots i.on{background:var(--gold)}
+#mute{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:14px;padding:8px 14px;font-size:18px;background:#ffffff22;color:#fff;box-shadow:none;display:none}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:0 0 14px}.em{background:#ffffff18;box-shadow:none;font-size:28px;padding:8px 14px;color:#fff;border:1px solid #ffffff33}.note{min-height:30px;color:var(--gold);margin-bottom:16px}.nav{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.back{background:#ffffff22;color:#fff;box-shadow:none}.fh{position:fixed;bottom:-30px;font-size:26px;animation:up 4s linear forwards;pointer-events:none}@keyframes up{to{transform:translateY(-110vh)}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<button id="mute" aria-label="صدا">🎵</button>
+
+<section class="page on" id="p0">
+  <div class="moon">🌙</div>
+  <h1>فاطمه‌ی عزیز</h1>
+  <p>یه هدیه‌ی کوچیک برای تو آماده کردم. برای شروع، روی دکمه بزن.</p>
+  <button onclick="startGift()">باز کن 🎁</button>
+</section>
+
+<section class="page" id="p1">
+  <h1>روز دختر مبارک ✨</h1>
+  <p>دختر بودن یعنی نور، مهربانی و قدرت؛ و تو هر سه تاش رو با هم داری. روز دختر بر تو که این‌قدر دوست داشتنی هستی، از ته دل مبارک.</p>
+  <div class="row" id="fl"></div><div class="note" id="fn">گل‌ها رو لمس کن تا شکوفه بدن</div><div class="nav"><button class="back" onclick="go(0)">→ بازگشت</button><button onclick="go(2)">بعدی ←</button></div>
+</section>
+
+<section class="page" id="p2">
+  <h1>تو مثل آسمون شب هستی 🌌</h1>
+  <p>آروم و عمیق؛ پر از ستاره. هر جا که باشی دور و برت رو روشن می‌کنی. دوستی با تو یکی از قشنگ‌ترین هدیه‌های زندگیمه. روی آسمون بزن و ستاره بساز!</p>
+  <div class="row" id="sw"></div><div class="nav"><button class="back" onclick="go(1)">→ بازگشت</button><button onclick="comet()">☄️ دنباله‌دار</button><button onclick="go(3)">بعدی ←</button></div>
+</section>
+
+<section class="page" id="p3">
+  <h1>💙</h1>
+  <p>آرزو می‌کنم هر رویایی که تو سرت داری به واقعیت تبدیل بشه، لبخندت همیشه سر جاش بمونه و ستاره‌های زندگیت هیچ‌وقت کم نشن. دوستت دارم، روزت مبارک!</p>
+  <div class="note" id="wm"></div><div class="nav"><button class="back" onclick="go(2)">→ بازگشت</button><button onclick="wish()">یه آرزو کن 🌠</button></div>
+</section>
+
+<div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i></div>
+
+<script>
+var cur=0,pages=document.querySelectorAll('.page'),dots=document.querySelectorAll('.dots i');
+function go(n){cur=n;pages.forEach(function(p,i){p.classList.toggle('on',i===n)});dots.forEach(function(d,i){d.classList.toggle('on',i===n)});burst(innerWidth/2,innerHeight/2,18)}
+function startGift(){startMusic();document.getElementById('mute').style.display='block';go(1)}
+
+var fc=0,wm=['آرزو کردم هر روزت پر از لبخند باشه 😊','آرزو کردم به همه‌ی چیزایی که می‌خوای برسی 🌠','آرزو کردم همیشه کنارت آدمای خوب باشن 💙'];
+(function(){var r=document.getElementById('fl');for(var i=0;i<5;i++){var b=document.createElement('button');b.className='em';b.textContent='🌷';b.onclick=function(){if(this.dataset.o)return;this.dataset.o=1;this.textContent='🌸';var q=this.getBoundingClientRect();burst(q.left+q.width/2,q.top+q.height/2,16);if(++fc===5)document.getElementById('fn').textContent='همه شکفتن، درست مثل تو 🌸'};r.appendChild(b)}
+var s=document.getElementById('sw');['مهربون 💛','قوی 💪','بامزه 😄'].forEach(function(t){var b=document.createElement('button');b.className='em';b.textContent='⭐';b.onclick=function(){if(this.dataset.o)return;this.dataset.o=1;this.textContent=t;var q=this.getBoundingClientRect();burst(q.left+q.width/2,q.top+q.height/2,16)};s.appendChild(b)})})();
+function comet(){var x=W*.9,y=H*.1,i=0,iv=setInterval(function(){burst(x,y,3);x-=W*.03;y+=H*.02;if(++i>30)clearInterval(iv)},25)}
+function hearts(){for(var i=0;i<14;i++)setTimeout(function(){var s=document.createElement('span');s.className='fh';s.textContent=['💙','✨','🌙','⭐'][Math.random()*4|0];s.style.left=Math.random()*90+'vw';document.body.appendChild(s);setTimeout(function(){s.remove()},4100)},i*150)}
+addEventListener('pointermove',function(e){burst(e.clientX,e.clientY,1)});
+addEventListener('keydown',function(e){if(cur&&e.key==='ArrowLeft'&&cur<3)go(cur+1);if(cur&&e.key==='ArrowRight')go(cur-1)});
+var sx=0;addEventListener('touchstart',function(e){sx=e.touches[0].clientX});addEventListener('touchend',function(e){var d=e.changedTouches[0].clientX-sx;if(!cur||Math.abs(d)<70)return;if(d<0&&cur<3)go(cur+1);else if(d>0)go(cur-1)});
+/* stars + sparkles */
+var cv=document.getElementById('c'),cx=cv.getContext('2d'),W,H,stars=[],sp=[];
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+rs();addEventListener('resize',rs);
+for(var i=0;i<90;i++)stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.3,t:Math.random()*6});
+function burst(x,y,n){for(var i=0;i<n;i++){var a=Math.random()*6.28,s=Math.random()*3+1;sp.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1})}}
+function wish(){hearts();document.getElementById('wm').textContent=wm[Math.random()*wm.length|0];for(var i=0;i<6;i++)setTimeout(function(){burst(Math.random()*W,Math.random()*H*.6,24)},i*200)}
+addEventListener('pointerdown',function(e){burst(e.clientX,e.clientY,10)});
+(function loop(t){cx.clearRect(0,0,W,H);
+stars.forEach(function(s){cx.globalAlpha=.4+.6*Math.abs(Math.sin(t/1000+s.t));cx.fillStyle='#fff';cx.beginPath();cx.arc(s.x*W,s.y*H,s.r,0,6.28);cx.fill()});
+sp=sp.filter(function(p){return p.l>0});
+sp.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.03;p.l-=.015;cx.globalAlpha=p.l;cx.fillStyle='#f3d9a0';cx.beginPath();cx.arc(p.x,p.y,2.2,0,6.28);cx.fill()});
+requestAnimationFrame(loop)})(0);
+
+/* soft synthesized background music (no external files) */
+var ac,master,on=false,timer,step=0;
+var mel=[293.66,349.23,440,523.25,440,349.23,392,466.16,392,349.23,293.66,261.63,293.66,349.23,440,349.23];
+var bass=[73.42,58.27,65.41,73.42];
+function tone(f,t,d,v,type){var o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.04);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(master);o.start(t);o.stop(t+d+.1)}
+function tick(){var t=ac.currentTime+.05;tone(mel[step%16],t,1.6,.13,'triangle');
+if(step%4===0){var b=bass[(step/4)%4];tone(b,t,2.6,.2,'sine');tone(b*4,t,2.6,.05,'sine')}
+step++}
+function startMusic(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+master=ac.createGain();master.gain.value=.5;
+var d=ac.createDelay(1),fb=ac.createGain();d.delayTime.value=.42;fb.gain.value=.4;
+master.connect(ac.destination);master.connect(d);d.connect(fb);fb.connect(d);d.connect(ac.destination);
+ac.resume();on=true;timer=setInterval(tick,520)}catch(e){}}
+document.getElementById('mute').onclick=function(){if(!ac)return;if(on){clearInterval(timer);on=false;this.textContent='🔇'}else{timer=setInterval(tick,520);on=true;this.textContent='🎵'}};
+</script>
+</body>
+</html>
